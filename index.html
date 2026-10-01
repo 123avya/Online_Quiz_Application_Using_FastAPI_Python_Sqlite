@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>QuizMaster</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</head>
+
+<body>
+
+<div id="toast"></div>
+<nav>
+    <div class="logo" onclick="showPage('landing')">
+        <i class="fas fa-bolt"></i>
+        QuizMaster
+    </div>
+    <div id="nav"></div>
+</nav>
+
+<section id="landing" class="page active">
+    <div class="hero">
+        <h1>QuizMaster</h1>
+        <p>Test your knowledge with dynamic quizzes.
+           Create, compete, and climb the leaderboard.
+        </p>
+
+        <div class="roles">
+            <div class="role" onclick="showPage('adminLogin')">
+                <div class="icon">
+                    <i class="fas fa-shield-halved"></i>
+                </div>
+                <h2>Admin Portal</h2>
+                <p>Create and manage quiz questions</p>
+
+                <span>
+                    <i class="fas fa-arrow-right"></i>
+                </span>
+
+            </div>
+
+
+            <div class="role" onclick="showPage('studentLogin')">
+
+                <div class="icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+
+                <h2>Student Portal</h2>
+
+                <p>
+                    Take quizzes and track your progress
+                </p>
+
+                <span>
+                    <i class="fas fa-arrow-right"></i>
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section id="adminLogin" class="page">
+    <div class="form-box">
+        <button class="back"onclick="showPage('landing')">← Back
+        </button>
+        <div class="card">
+            <div class="form-title">
+                <i class="fas fa-shield-halved"></i>
+                <h2>Admin Login</h2>
+                <p>Access the question management panel</p>
+            </div>
+
+            <form onsubmit="adminLogin(event)">
+
+                <label>Username</label>
+                <input id="adminUser" placeholder="Enter username" required>
+                <label>Password</label>
+                <input id="adminPass" type="password" placeholder="Enter password" required>
+                <button class="primary">Sign In</button>
+
+            </form>
+
+            <small>
+                Default: admin / admin123
+            </small>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section id="studentLogin" class="page">
+    <div class="form-box">
+        <button class="back" onclick="showPage('landing')">← Back
+        </button>
+        <div class="card">
+            <div class="form-title">
+                <i class="fas fa-graduation-cap"></i>
+                <h2>Student Login</h2>
+                <p>Sign in to take quizzes</p>
+
+            </div>
+
+            <form onsubmit="studentLogin(event)">
+                <label>Roll Number</label>
+                <input id="loginRoll" placeholder="Enter roll number" required>
+                <label>Password</label>
+                <input id="loginPass" type="password" placeholder="Enter password" required>
+                <button class="primary">Sign In
+                </button>
+
+            </form>
+
+            <p class="switch">Don't have an account?<a onclick="showPage('register')">Register here</a></p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section id="register" class="page">
+    <div class="form-box">
+        <button class="back" onclick="showPage('studentLogin')">← Back</button>
+        <div class="card">
+            <div class="form-title">
+                <i class="fas fa-user-plus"></i>
+                <h2>Student Registration</h2>
+                <p>Create your account</p>
+            </div>
+            <form onsubmit="registerStudent(event)">
+                <label>Full Name</label>
+                <input id="regName" placeholder="Enter full name" required>
+
+                <label>Roll Number</label>
+
+                <input id="regRoll" placeholder="Enter roll number" required>
+
+                <label>Password</label>
+
+                <input id="regPass" type="password" placeholder="Create password" required>
+
+                <label>Confirm Password</label>
+
+                <input id="regConfirm" type="password" placeholder="Confirm password" required>
+
+                <button class="primary">Create Account</button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section id="adminDashboard" class="page">
+    <div class="dashboard">
+        <header>
+            <div>
+                <h1>Admin Dashboard</h1>
+                <p id="adminWelcome"></p>
+            </div>
+
+            <button class="outline" onclick="logout()">Logout</button>
+
+        </header>
+
+
+        <div class="stats">
+
+            <div>
+
+                <i class="fas fa-question-circle"></i>
+
+                <strong id="questionsCount">
+                    0
+                </strong>
+
+                <small>Questions</small>
+
+            </div>
+
+
+            <div>
+
+                <i class="fas fa-users"></i>
+
+                <strong id="studentsCount">
+                    0
+                </strong>
+
+                <small>Students</small>
+
+            </div>
+
+
+            <div>
+
+                <i class="fas fa-chart-line"></i>
+
+                <strong id="attemptsCount">
+                    0
+                </strong>
+
+                <small>Attempts</small>
+
+            </div>
+
+        </div>
+
+
+        <!-- CREATE QUESTION -->
+
+        <div class="box">
+
+            <h2>
+
+                <i class="fas fa-plus-circle"></i>
+
+                Create Question
+
+            </h2>
+
+            <form onsubmit="createQuestion(event)">
+
+                <label>Question</label>
+
+                <textarea id="question"
+                          placeholder="Type your question"
+                          required></textarea>
+
+                <div class="grid">
+
+                    <input id="optionA"
+                           placeholder="Option A"
+                           required>
+
+                    <input id="optionB"
+                           placeholder="Option B"
+                           required>
+
+                    <input id="optionC"
+                           placeholder="Option C"
+                           required>
+
+                    <input id="optionD"
+                           placeholder="Option D"
+                           required>
+
+                </div>
+
+                <label>Correct Answer</label>
+
+                <select id="correct"
+                        required>
+
+                    <option value="">
+                        Select answer
+                    </option>
+
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+
+                </select>
+
+                <button class="primary">
+                    Add Question
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- QUESTIONS -->
+
+        <div class="box">
+
+            <h2>
+
+                <i class="fas fa-database"></i>
+
+                Question Bank
+
+            </h2>
+
+            <div id="questionList"></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- STUDENT DASHBOARD -->
+
+<section id="studentDashboard"
+         class="page">
+
+    <div class="dashboard">
+
+        <header>
+
+            <div>
+
+                <h1>Student Dashboard</h1>
+
+                <p id="studentWelcome"></p>
+
+            </div>
+
+            <button class="outline"
+                    onclick="logout()">
+
+                Logout
+
+            </button>
+
+        </header>
+
+
+        <div class="stats">
+
+            <div>
+
+                <i class="fas fa-redo"></i>
+
+                <strong id="myAttempts">
+                    0
+                </strong>
+
+                <small>Attempts</small>
+
+            </div>
+
+
+            <div>
+
+                <i class="fas fa-trophy"></i>
+
+                <strong id="bestScore">
+                    0
+                </strong>
+
+                <small>Best Score</small>
+
+            </div>
+
+        </div>
+
+
+        <div class="actions">
+
+            <div>
+
+                <div class="actionIcon">
+
+                    <i class="fas fa-play-circle"></i>
+
+                </div>
+
+                <h3>Start Quiz</h3>
+
+                <p>
+                    Answer all questions and get your
+                    score instantly.
+                </p>
+
+                <button class="primary"
+                        onclick="startQuiz()">
+
+                    Start Quiz
+
+                </button>
+
+            </div>
+
+
+            <div>
+
+                <div class="actionIcon blue">
+
+                    <i class="fas fa-history"></i>
+
+                </div>
+
+                <h3>My Results</h3>
+
+                <p>
+                    View your previous quiz attempts.
+                </p>
+
+                <button class="outline"
+                        onclick="myResults()">
+
+                    View Results
+
+                </button>
+
+            </div>
+
+
+            <div>
+
+                <div class="actionIcon green">
+
+                    <i class="fas fa-ranking-star"></i>
+
+                </div>
+
+                <h3>Leaderboard</h3>
+
+                <p>
+                    See your rank among students.
+                </p>
+
+                <button class="outline"
+                        onclick="leaderboard()">
+
+                    View Leaderboard
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- QUIZ -->
+
+<section id="quiz"
+         class="page">
+
+    <div class="quiz">
+
+        <button class="back"
+                onclick="showPage('studentDashboard')">
+
+            ← Exit Quiz
+
+        </button>
+
+        <div id="quizQuestions"></div>
+
+        <button class="primary submit"
+                onclick="submitQuiz()">
+
+            <i class="fas fa-paper-plane"></i>
+
+            Submit Quiz
+
+        </button>
+
+    </div>
+
+</section>
+
+
+<section id="result" class="page">
+    <div class="result">
+        <div class="scoreCircle">
+            <strong id="score">0</strong>
+            <span id="total">/ 0</span>
+
+        </div>
+
+        <h2 id="resultMessage">Great Job!</h2>
+        <p id="percentage">0%</p>
+
+
+        <div class="resultStats">
+            <div>
+                <b id="correctCount">0</b>
+                <span>Correct</span>
+            </div>
+            <div>
+                <b id="wrongCount">0</b>
+                <span>Wrong</span>
+
+            </div>
+
+            <div>
+                <b id="skipCount">0</b>
+
+                <span>Skipped</span>
+
+            </div>
+
+        </div>
+
+
+        <h3>Detailed Review</h3>
+
+        <div id="review"></div>
+
+
+        <button class="primary" onclick="startQuiz()">Retake Quiz</button>
+
+        <button class="outline" onclick="showPage('studentDashboard')">Dashboard</button>
+
+    </div>
+
+</section>
+
+
+<section id="leaderboard" class="page">
+    <div class="dashboard">
+        <button class="back" onclick="showPage('studentDashboard')">← Back</button>
+        <h1 class="center">🏆 Leaderboard</h1>
+        <div id="leaderboardList"></div>
+
+    </div>
+
+</section>
+
+
+<section id="results" class="page">
+    <div class="dashboard">
+        <button class="back" onclick="showPage('studentDashboard')">← Back</button>
+        <h1><i class="fas fa-history"></i>My Results</h1>
+        <div id="resultsList"></div>
+
+    </div>
+
+</section>
+
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
